@@ -1,0 +1,17 @@
+{
+    "openFiles": [
+        "quantum_planning.mzn",
+        "utils.mzn",
+        "data.dzn"
+    ],
+    "openTab": 1,
+    "projectFiles": [
+        "data.dzn",
+        "generation.mzn",
+        "quantum_planning.mzn",
+        "utils.mzn"
+    ],
+    "selectedBuiltinConfigId": "org.gecode.gecode",
+    "selectedBuiltinConfigVersion": "6.3.0",
+    "version": 106
+}
