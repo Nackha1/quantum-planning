@@ -3,10 +3,9 @@
         "quantum_planning.mzn",
         "utils.mzn",
         "data.dzn",
-        "output_checker.mzn",
         "generation.mzn"
     ],
-    "openTab": 4,
+    "openTab": 3,
     "projectFiles": [
         "data.dzn",
         "generation.mzn",
