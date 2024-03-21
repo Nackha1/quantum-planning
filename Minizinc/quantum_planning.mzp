@@ -2,13 +2,13 @@
     "openFiles": [
         "quantum_planning.mzn",
         "utils.mzn",
-        "data.dzn",
-        "generation.mzn"
-    ],
-    "openTab": 3,
-    "projectFiles": [
-        "data.dzn",
         "generation.mzn",
+        "input_data.dzn"
+    ],
+    "openTab": 0,
+    "projectFiles": [
+        "generation.mzn",
+        "input_data.dzn",
         "output_checker.mzn",
         "quantum_planning.mzn",
         "utils.mzn"

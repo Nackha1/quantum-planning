@@ -1,3 +1,10 @@
+predicate is_identity(array[int,int] of var int: A) =
+  let { int: n = max(index_set_1of2(A)) } in
+  forall(i,j in 1..n where i != j)(A[i,i] = 1 /\ A[i,j] = 0);
+  
+predicate is_unitary(array[int,int] of var int: A) =
+  is_identity(matrix_mul(A, transpose(A)));
+
 function array[int,int] of var int: get_matrix_at(array[int,int,int] of var int: A, var int: time) =
   let { int: n = max(index_set_1of3(A)) } in
   array2d(1..n, 1..n, [A[i,j,time] | i,j in 1..n]);
@@ -21,15 +28,3 @@ function var int: determinant(array[int,int] of var int: A) =
 function array[int,int] of var int: sub_matrix(array[int,int] of var int: A, int: row_ex, int: col_ex) =
   let { int: n = max(index_set_1of2(A)) } in
   array2d(1..(n-1), 1..(n-1), [A[i,j] | i,j in 1..n where i != row_ex /\ j != col_ex]);
-  
-% function array[int,int] of var int: xor_rows(array[int,int] of var int: A, int: first_row, int: second_row) =
-%   let { int: n = max(index_set_1of2(A)) } in
-%   array2d(1..n, 1..n, [if i = first_row then (A[i,j] + A[second_row,j]) mod 2 else A[i,j] endif | i,j in 1..n]);
-  
-predicate is_identity(array[int,int] of var int: A) =
-  let { int: n = max(index_set_1of2(A)) } in
-%   forall(i,j in 1..n)(if i = j then A[i,j] = 1 else A[i,j] = 0 endif);
-  forall(i,j in 1..n where i != j)(A[i,i] = 1 /\ A[i,j] = 0);
-  
-predicate is_unitary(array[int,int] of var int: A) =
-  is_identity(matrix_mul(A, transpose(A)));
