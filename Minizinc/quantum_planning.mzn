@@ -1,3 +1,4 @@
+include "globals.mzn";
 include "utils.mzn";
 
 % Constants
@@ -14,29 +15,35 @@ var 0..max_t: steps;
 constraint forall(i,j in 1..n)(A[i,j,0] = M[i,j]);
 
 % Plan generation
-constraint forall(t in 1..max_t)(plan[1,t] != plan[2,t] \/ (plan[1,t] = 0 /\ plan[2,t] = 0));
-
-% Final goal
-%constraint forall(i,j in 1..n where i != j)(sum(k in 1..n)(A[i,k,steps] * A[i,k,steps]) = 1 /\ sum(k in 1..n)(A[i,k,steps] * A[j,k,steps]) = 0);
-
-% Same as above, same speed
-%constraint forall(i,j in 1..n where i != j)(sum(k in 1..n)(A[i,k,steps] * A[j,k,steps]) = 0);
-%constraint forall(i in 1..n)(sum(k in 1..n)(A[i,k,steps] * A[i,k,steps]) = 1);
-
-% Same as above, same speed
-constraint is_unitary(get_matrix_at(A, steps));
-
-% Fast "split" version
-constraint forall(i,j in 1..n, t in 1..max_t)(plan[1,t] = i -> A[i,j,t] = (A[i,j,t-1] + A[plan[2,t],j,t-1]) mod 2);
-constraint forall(i,j in 1..n, t in 1..max_t)(plan[1,t] != i -> A[i,j,t] = A[i,j,t-1]);
-
-% Slow "compound" version
-%constraint forall(i,j in 1..n, t in 1..max_t)(if plan[1,t] = i then A[i,j,t] = (A[i,j,t-1] + A[plan[2,t],j,t-1]) mod 2 else A[i,j,t] = A[i,j,t-1] endif);
-
-% Slower search if enabled, strange
-%constraint forall(t in 0..max_t-1)(is_unitary(get_matrix_at(A, t)) -> (plan[1,t+1] = 0 /\ plan[2,t+1] = 0));
+constraint forall(t in 1..max_t)(plan[1,t] = 0 -> plan[2,t] = 0);
+constraint forall(t in 1..max_t)(plan[1,t] != 0 -> plan[1,t] != plan[2,t]);
 
 constraint forall(t in steps+1..max_t)(plan[1,t] = 0 /\ plan[2,t] = 0);
+constraint forall(t in 1..max_t-1)(plan[1,t] = 0 -> plan[1,t+1] = 0);
+
+% Final goal
+% constraint forall(i,j in 1..n where i != j)(sum(k in 1..n)(A[i,k,steps] * A[i,k,steps]) = 1 /\ sum(k in 1..n)(A[i,k,steps] * A[j,k,steps]) = 0);
+
+% Same as above, same speed
+% constraint forall(i,j in 1..n where i != j)(sum(k in 1..n)(A[i,k,steps] * A[j,k,steps]) = 0);
+% constraint forall(i in 1..n)(sum(k in 1..n)(A[i,k,steps] * A[i,k,steps]) = 1);
+
+% Same as above, same speed
+% constraint is_unitary(get_matrix_at(A, steps));
+
+% Faster unitary check
+constraint forall(i in 1..n)(count([A[i,j,steps] | j in 1..n], 1) = 1);
+constraint forall(j in 1..n)(count([A[i,j,steps] | i in 1..n], 1) = 1);
+
+% constraint forall(i in 1..n)(count(row(get_matrix_at(A, steps), i), 1) = 1);
+% constraint forall(j in 1..n)(count(col(get_matrix_at(A, steps), j), 1) = 1);
+
+% Evolution "split" version
+% constraint forall(i,j in 1..n, t in 1..max_t)(plan[1,t] = i -> A[i,j,t] = (A[i,j,t-1] + A[plan[2,t],j,t-1]) mod 2);
+% constraint forall(i,j in 1..n, t in 1..max_t)(plan[1,t] != i -> A[i,j,t] = A[i,j,t-1]);
+
+% Evolution "compound" version
+constraint forall(i,j in 1..n, t in 1..max_t)(if plan[1,t] = i then A[i,j,t] = (A[i,j,t-1] + A[plan[2,t],j,t-1]) mod 2 else A[i,j,t] = A[i,j,t-1] endif);
 
 output ["M = \n" ++ show2d(M) ++ ";\n"];
 output ["xor rows \(plan[1,t]) and \(plan[2,t])\n" ++ "A[\(t)] = \n" ++ show2d(get_matrix_at(A, t)) ++ ";\n" | t in 1..fix(steps)];

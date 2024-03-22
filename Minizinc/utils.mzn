@@ -1,9 +1,9 @@
+predicate is_unitary(array[int,int] of var int: A) =
+  is_identity(matrix_mul(A, transpose(A)));
+  
 predicate is_identity(array[int,int] of var int: A) =
   let { int: n = max(index_set_1of2(A)) } in
   forall(i,j in 1..n where i != j)(A[i,i] = 1 /\ A[i,j] = 0);
-  
-predicate is_unitary(array[int,int] of var int: A) =
-  is_identity(matrix_mul(A, transpose(A)));
 
 function array[int,int] of var int: get_matrix_at(array[int,int,int] of var int: A, var int: time) =
   let { int: n = max(index_set_1of3(A)) } in
