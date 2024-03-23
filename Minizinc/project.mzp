@@ -1,0 +1,25 @@
+{
+    "openFiles": [
+        "model_v1.mzn",
+        "model_v2.mzn",
+        "utils.mzn",
+        "generation.mzn",
+        "inputs/01_easy.dzn",
+        "inputs/02_medium.dzn",
+        "inputs/03_hard.dzn"
+    ],
+    "openTab": 3,
+    "projectFiles": [
+        "generation.mzn",
+        "inputs/01_easy.dzn",
+        "inputs/02_medium.dzn",
+        "inputs/03_hard.dzn",
+        "model_v1.mzn",
+        "model_v2.mzn",
+        "solver_config.mpc",
+        "test_data.dzn",
+        "utils.mzn"
+    ],
+    "selectedSolverConfigFile": "solver_config.mpc",
+    "version": 106
+}

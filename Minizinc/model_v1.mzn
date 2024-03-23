@@ -29,14 +29,7 @@ constraint forall(t in 1..max_t-1)(plan[1,t] = 0 -> plan[1,t+1] = 0);
 % constraint forall(i in 1..n)(sum(k in 1..n)(A[i,k,steps] * A[i,k,steps]) = 1);
 
 % Same as above, same speed
-% constraint is_unitary(get_matrix_at(A, steps));
-
-% Faster unitary check
-constraint forall(i in 1..n)(count([A[i,j,steps] | j in 1..n], 1) = 1);
-constraint forall(j in 1..n)(count([A[i,j,steps] | i in 1..n], 1) = 1);
-
-% constraint forall(i in 1..n)(count(row(get_matrix_at(A, steps), i), 1) = 1);
-% constraint forall(j in 1..n)(count(col(get_matrix_at(A, steps), j), 1) = 1);
+constraint is_unitary(get_matrix_at(A, steps));
 
 % Evolution "split" version
 % constraint forall(i,j in 1..n, t in 1..max_t)(plan[1,t] = i -> A[i,j,t] = (A[i,j,t-1] + A[plan[2,t],j,t-1]) mod 2);
@@ -49,5 +42,5 @@ output ["M = \n" ++ show2d(M) ++ ";\n"];
 output ["xor rows \(plan[1,t]) and \(plan[2,t])\n" ++ "A[\(t)] = \n" ++ show2d(get_matrix_at(A, t)) ++ ";\n" | t in 1..fix(steps)];
 output ["Final matrix in \(steps) steps, is it unitary? \(is_unitary(get_matrix_at(A, steps)))\n"];
 output ["Plan = \n" ++ show2d(plan) ++ ";\n"];
-solve :: int_search(plan, input_order, indomain_random)
+solve %:: int_search(plan, input_order, indomain_random)
       minimize steps;

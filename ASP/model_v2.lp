@@ -12,7 +12,6 @@ a(X,Y,V,0) :- coord(X), coord(Y), val(V), m(X,Y,V).
 
 % Contiguous plan
 :- time(T), time(T-1), xor(_,_,T), not xor(_,_,T-1).
-% :- time(T), time(T-1), coord(I1), coord(J1), coord(I2), coord(J2), xor(I1,J1,T), not xor(I2,J2,T-1).
 
 % Evolution propagation
 affected(I,T) :- coord(I), coord(J), time(T), xor(I,J,T).
@@ -26,14 +25,11 @@ a(X,Y,V,T) :-   coord(X), coord(Y), val(V), time(T), steps(L),
 % Plan length
 steps(L) :- L = #count { T : coord(I), coord(J), time(T), xor(I,J,T) }.
 
-% Matrix for unitary check
-c(I,J,S) :- coord(I), coord(J), steps(L),
-            S = #sum { V1 * V2, K : coord(K), val(V1), val(V2), a(I,K,V1,L), a(J,K,V2,L) }.
-
 % Final goal
-goal(X,Y) :- coord(X), coord(Y), c(X,Y,S), X != Y, S = 0.
-goal(X,X) :- coord(X), c(X,X,S), S = 1.
-:- coord(X), coord(Y), not goal(X,Y).
+row_goal(X) :- coord(X), steps(L), S = #sum { V, Y : coord(Y), val(V), a(X,Y,V,L) }, S = 1.
+col_goal(Y) :- coord(Y), steps(L), S = #sum { V, X : coord(X), val(V), a(X,Y,V,L) }, S = 1.
+:- coord(X), not row_goal(X).
+:- coord(Y), not col_goal(Y).
 
 #minimize { L : steps(L) }.
 
@@ -44,5 +40,5 @@ goal(X,X) :- coord(X), c(X,X,S), S = 1.
 
 % Debug
 % #show affected/2.
-% #show c/3.
-% #show goal/2.
+% #show row_goal/1.
+% #show col_goal/1.
