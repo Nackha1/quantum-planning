@@ -8,16 +8,16 @@
         "inputs/02_medium.dzn",
         "inputs/03_hard.dzn"
     ],
-    "openTab": 3,
+    "openTab": 6,
     "projectFiles": [
         "generation.mzn",
         "inputs/01_easy.dzn",
         "inputs/02_medium.dzn",
         "inputs/03_hard.dzn",
+        "inputs/test_data.dzn",
         "model_v1.mzn",
         "model_v2.mzn",
         "solver_config.mpc",
-        "test_data.dzn",
         "utils.mzn"
     ],
     "selectedSolverConfigFile": "solver_config.mpc",
